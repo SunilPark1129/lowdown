@@ -1,18 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ArticleDetail from './ArticleDetail';
-import { useDispatch, useSelector } from 'react-redux';
-import { getFavoriteArticles } from '../../features/favorite/favoriteSlice';
+import { useSelector } from 'react-redux';
 
 function ArticleModal() {
-  const dispatch = useDispatch();
   const selectedArticle = useSelector((store) => store.article.selectedArticle);
   const favoriteList = useSelector((state) => state.favorite.articleList);
-
-  useEffect(() => {
-    if (selectedArticle) {
-      dispatch(getFavoriteArticles());
-    }
-  }, [selectedArticle]);
 
   if (!selectedArticle) return null;
   return (

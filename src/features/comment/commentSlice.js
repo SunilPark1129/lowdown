@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import { setUpdatedCommentTotal } from '../article/articleSlice';
-import {
-  getFavoriteArticles,
-  setUpdatedCommentTotalFavorite,
-} from '../favorite/favoriteSlice';
+import { getFavoriteArticles } from '../favorite/favoriteSlice';
 
 export const getComments = createAsyncThunk(
   'comments/getComments',
@@ -27,8 +24,11 @@ export const createComment = createAsyncThunk(
     try {
       const response = await api.post('/comments', { articleId, contents });
       await dispatch(getComments(articleId));
-      await dispatch(setUpdatedCommentTotal({ articleId, increase: 1 }));
-      if (isFromFavorite) dispatch(getFavoriteArticles());
+      if (isFromFavorite) {
+        dispatch(getFavoriteArticles());
+      } else {
+        dispatch(setUpdatedCommentTotal({ articleId, increase: 1 }));
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -45,8 +45,11 @@ export const deleteComment = createAsyncThunk(
     try {
       await api.delete(`/comments/${commentId}`);
       await dispatch(getComments(articleId));
-      await dispatch(setUpdatedCommentTotal({ articleId, increase: -1 }));
-      if (isFromFavorite) dispatch(getFavoriteArticles());
+      if (isFromFavorite) {
+        dispatch(getFavoriteArticles());
+      } else {
+        dispatch(setUpdatedCommentTotal({ articleId, increase: -1 }));
+      }
       return commentId;
     } catch (error) {
       return rejectWithValue(error.error);

@@ -45,8 +45,6 @@ export const deleteFavoriteArticle = createAsyncThunk(
   }
 );
 
-export const getFavoriteArticlesDetails = createAsyncThunk();
-
 const favoriteSlice = createSlice({
   name: 'articles',
   initialState: {

@@ -60,6 +60,20 @@ export const updateArticleViews = createAsyncThunk(
   }
 );
 
+export const getSearchArticle = createAsyncThunk(
+  'articles/getSearchArticle',
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/articles', {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const articleSlice = createSlice({
   name: 'articles',
   initialState,
@@ -148,6 +162,20 @@ const articleSlice = createSlice({
         state.error = null;
       })
       .addCase(updateArticleViews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getSearchArticle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getSearchArticle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.articleList = action.payload.articles;
+        state.totalPageNum = action.payload.totalPageNum;
+      })
+      .addCase(getSearchArticle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

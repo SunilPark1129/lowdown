@@ -10,6 +10,9 @@ import api from '../../utils/api';
 export const getFavoriteArticles = createAsyncThunk(
   'myfavorite/getFavoriteArticles',
   async (_, { rejectWithValue }) => {
+    if (!localStorage.getItem('token')) {
+      return { articleList: [], totalArticleCount: 0 };
+    }
     try {
       const response = await api.get('/favorites');
       return response.data.favorites;
@@ -91,7 +94,6 @@ const favoriteSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.success = true;
-
         state.articleList = action.payload.articleList
           .map((item, idx) => {
             item.totalCommentCount = item.comments.length;

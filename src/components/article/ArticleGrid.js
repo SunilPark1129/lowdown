@@ -51,24 +51,22 @@ function ArticleGrid({ category, articleList, totalPageNum, page, loading }) {
         </h1>
       </header>
       <div className="article__content">
-        {articleList
-          .filter(({ title }) => title !== '[Removed]')
-          .map((item, idx) => {
-            let isLast = false;
-            if (articleList.length - 1 === idx) isLast = true;
-            return (
-              <ArticleCard
-                item={item}
-                key={item._id}
-                handleOpen={handleOpen}
-                handleFavorite={handleFavorite}
-                isLast={isLast}
-                totalPageNum={totalPageNum}
-                page={page}
-                category={category}
-              />
-            );
-          })}
+        {articleList.map((item, idx) => {
+          let isLast = false;
+          if (articleList.length - 1 === idx) isLast = true;
+          return (
+            <ArticleCard
+              item={item}
+              key={item._id}
+              handleOpen={handleOpen}
+              handleFavorite={handleFavorite}
+              isLast={isLast}
+              totalPageNum={totalPageNum}
+              page={page}
+              category={category}
+            />
+          );
+        })}
       </div>
       {loading && totalPageNum >= page && <LoadingSpinner />}
     </article>

@@ -37,8 +37,10 @@ export const getArticlesByCategory = createAsyncThunk(
   async ({ page, category }, { rejectWithValue }) => {
     try {
       const response = await api.get('/articles', {
-        params: { page: page || 1, category },
+        params: { page: page || 0, category },
       });
+      console.log(response.data);
+      console.log('Request Params:', { page: page || 1, category });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './home.style.css';
-import { Link, NavLink, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ArticleGrid from '../../components/article/ArticleGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryList } from '../../utils/categoryList';
@@ -9,7 +9,6 @@ import {
   getArticlesByCategory,
 } from '../../features/article/articleSlice';
 import { getFavoriteArticles } from '../../features/favorite/favoriteSlice';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -34,8 +33,6 @@ function HomePage() {
   const { articleList, totalPageNum, page, loading } = useSelector(
     (state) => state.article
   );
-
-  // if (loading) return <LoadingSpinner />;
 
   return (
     <>

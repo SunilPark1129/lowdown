@@ -10,7 +10,7 @@ import api from '../../utils/api';
 export const getFavoriteArticles = createAsyncThunk(
   'myfavorite/getFavoriteArticles',
   async (_, { rejectWithValue }) => {
-    if (!localStorage.getItem('token')) {
+    if (!sessionStorage.getItem('token')) {
       return { articleList: [], totalArticleCount: 0 };
     }
     try {
@@ -27,7 +27,7 @@ export const addFavoriteArticle = createAsyncThunk(
   async ({ articleId }, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.post('/favorites', { articleId });
-      dispatch(getFavoriteArticles());
+      await dispatch(getFavoriteArticles());
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);

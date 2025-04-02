@@ -8,6 +8,7 @@ const initialState = {
   selectedCategory: 'business',
   totalArticleCount: 0,
   totalPageNum: 1,
+  searchedValue: '',
   page: 0,
   loading: false,
   error: null,
@@ -39,8 +40,6 @@ export const getArticlesByCategory = createAsyncThunk(
       const response = await api.get('/articles', {
         params: { page: page || 0, category },
       });
-      console.log(response.data);
-      console.log('Request Params:', { page: page || 1, category });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -87,6 +86,7 @@ const articleSlice = createSlice({
       state.totalArticleCount = 0;
       state.totalPageNum = 1;
       state.page = 0;
+      state.searchedValue = '';
       state.loading = false;
       state.error = null;
       state.success = false;
@@ -111,6 +111,9 @@ const articleSlice = createSlice({
           state.articleList[idx].totalCommentCount + action.payload.increase,
       };
       state.selectedArticle = state.articleList[idx];
+    },
+    setSearchedValue: (state, action) => {
+      state.searchedValue = action.payload;
     },
     setSelectedCategory: (state, action) => {
       state.selectedCategory = action.payload;
@@ -190,5 +193,6 @@ export const {
   setSelectedArticle,
   setClearSelectedArticle,
   setUpdatedCommentTotal,
+  setSearchedValue,
   setSelectedCategory,
 } = articleSlice.actions;

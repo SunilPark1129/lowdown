@@ -15,7 +15,10 @@ import ExitIcon from '../../assets/icons/ExitIcon';
 import { categoryList } from '../../utils/categoryList';
 import Modal from '../../composition/Modal';
 import SearchIcon from '../../assets/icons/SearchIcon';
-import { getSearchArticle } from '../../features/article/articleSlice';
+import {
+  getSearchArticle,
+  setSearchedValue,
+} from '../../features/article/articleSlice';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -32,7 +35,9 @@ const Navbar = () => {
   const searchRef = useRef(null);
   const [isLogoutModalOn, setIsLogoutModalOn] = useState(false);
   const { user } = useSelector((state) => state.user);
-  const { selectedArticle } = useSelector((store) => store.article);
+  const { selectedArticle, searchedValue } = useSelector(
+    (store) => store.article
+  );
 
   useEffect(() => {
     // 세션스토리지에 토큰이 있을 때만 실행
@@ -95,6 +100,7 @@ const Navbar = () => {
       handleSearch();
       return;
     }
+    dispatch(setSearchedValue(searchValue));
     dispatch(
       getSearchArticle({
         category: category,
@@ -128,9 +134,12 @@ const Navbar = () => {
 
         <nav>
           <div className="navbar__content">
-            <button className="navbar__search" onClick={handleSearch}>
-              <SearchIcon />
-            </button>
+            {location.pathname !== '/login' &&
+              location.pathname !== '/register' && (
+                <button className="navbar__search" onClick={handleSearch}>
+                  <SearchIcon />
+                </button>
+              )}
             {user ? (
               <>
                 <button className="navbar__btn" onClick={handleLogoutConfirm}>

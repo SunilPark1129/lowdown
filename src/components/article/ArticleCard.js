@@ -5,7 +5,10 @@ import ViewIcon from '../../assets/icons/ViewIcon';
 import CommentIcon from '../../assets/icons/CommentIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import HeartIcon from '../../assets/icons/HeartIcon';
-import { getArticlesByCategory } from '../../features/article/articleSlice';
+import {
+  getArticlesByCategory,
+  setSearchedValue,
+} from '../../features/article/articleSlice';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,10 +27,15 @@ function ArticleCard({
   const [published, setPublished] = useState(null);
   const isVisible = useInfiniteScroll(lastIdxRef, { threshold: 1.0 });
   const user = useSelector((state) => state.user.user);
+  const { searchedValue } = useSelector((store) => store.article);
 
   useEffect(() => {
     if (isLast && isVisible && totalPageNum >= page) {
-      dispatch(getArticlesByCategory({ page: page + 1, category }));
+      if (searchedValue) {
+        dispatch(setSearchedValue(searchedValue));
+      } else {
+        dispatch(getArticlesByCategory({ page: page + 1, category }));
+      }
     }
   }, [isVisible]);
 
